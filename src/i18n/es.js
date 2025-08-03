@@ -15,6 +15,7 @@ const messagesEs = {
   'otp.success': 'Autenticación exitosa',
   'otp.invalid': 'Código inválido',
   'otp.invalidSession': 'Sesión inválida. Inicia sesión nuevamente.',
+  'otp.invalidLength': 'El código debe tener exactamente {len} dígitos.',
 
   'forgot.title': 'Recuperar Contraseña',
   'forgot.label': 'Usuario o Correo Electrónico',

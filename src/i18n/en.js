@@ -15,6 +15,8 @@ const messagesEn = {
   'otp.success': 'Authentication successful',
   'otp.invalid': 'Invalid code',
   'otp.invalidSession': 'Invalid session. Please log in again.',
+  'otp.invalidLength': 'The code must be exactly {len} digits.',
+
 
   'forgot.title': 'Reset Password',
   'forgot.label': 'Username or Email',

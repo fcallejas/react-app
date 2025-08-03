@@ -1,9 +1,11 @@
 // File: src/pages/VerifyOtp.jsx
-
+import {useEffect} from 'react'
 import { Form, Input, Button, Card, message } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import { useIntl } from 'react-intl';
+import appConfig from '../config/appConfig.json'; // ⬅️ import del JSON
+
 
 /**
  * Componente para ingresar el código OTP (2FA).
@@ -16,6 +18,18 @@ export default function VerifyOtp() {
   const intl = useIntl();
 
   const userId = location.state?.userId;
+
+   // Lee longitud desde env o config.json, con fallback a 6
+  const OTP_LENGTH = Number(
+    import.meta.env.VITE_OTP_LENGTH ?? appConfig?.otp?.length ?? 6
+  );
+
+   useEffect(() => {
+    if (!userId) {
+      message.error(intl.formatMessage({ id: 'otp.invalidSession' }));
+      navigate('/login');
+    }
+  }, [userId, navigate, intl]);
 
   const onFinish = async (values) => {
     const lang = localStorage.getItem('lang') || 'es';
@@ -43,9 +57,15 @@ export default function VerifyOtp() {
           <Form.Item
             name="otp"
             label={intl.formatMessage({ id: 'otp.label' })}
-            rules={[{ required: true, message: intl.formatMessage({ id: 'form.required' }) }]}
+            rules={[{ required: true, message: intl.formatMessage({ id: 'form.required' }) },
+                  // Regla para exactamente OTP_LENGTH dígitos
+              {
+                pattern: new RegExp(`^\\d{${OTP_LENGTH}}$`),
+                message: intl.formatMessage({ id: 'otp.invalidLength' }, { len: OTP_LENGTH }),
+              },
+            ]}
           >
-            <Input.OTP length={6} inputType="numeric" />
+            <Input.OTP length={OTP_LENGTH} inputType="numeric" />
           </Form.Item>
 
           <Form.Item>

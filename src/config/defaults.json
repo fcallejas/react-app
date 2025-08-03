@@ -1,0 +1,33 @@
+{
+  "app": {
+    "name": "React App",
+    "env": "development",
+    "defaultLang": "es",
+    "supportedLangs": ["es", "en"]
+  },
+  "api": {
+    "baseURL": "https://localhost:7245/api",
+    "timeoutMs": 15000
+  },
+  "otp": {
+    "length": 6
+  },
+  "ui": {
+    "theme": "light",
+    "antd": {
+      "messageDuration": 3
+    }
+  },
+  "pagination": {
+    "pageSize": 20,
+    "pageSizeOptions": [10, 20, 50, 100]
+  },
+  "agGrid": {
+    "rowHeight": 44,
+    "headerHeight": 48
+  },
+  "features": {
+    "enable2FA": true,
+    "enableRemoteConfig": false
+  }
+}
