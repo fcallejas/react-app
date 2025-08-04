@@ -23,7 +23,7 @@ export default function ForgotPassword() {
       });
 
       message.success(intl.formatMessage({ id: 'forgot.success' }));
-      navigate('/login');
+      navigate(`/login?lang=${lang}`, { replace: true });
     } catch (error) {
       message.error(intl.formatMessage({ id: 'forgot.fail' }));
     }

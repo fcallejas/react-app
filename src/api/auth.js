@@ -9,9 +9,9 @@ const getLang = () => localStorage.getItem('lang') || 'es';
 /**
  * Realiza el inicio de sesión enviando usuario, contraseña y el idioma.
  */
-export const login = async ({ username, password }) => {
+export const login = async ({ username, password,recaptchaToken }) => {
   const lang = getLang();
-  const response = await api.post('/auth/login', { username, password, lang });
+  const response = await api.post('/auth/login', { username, password, lang,recaptchaToken });
   return response.data;
 };
 

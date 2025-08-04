@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Form, Input, Button, message, Card } from 'antd';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams,useNavigate  } from 'react-router-dom';
 import axios from 'axios';
 import { useIntl } from 'react-intl';
 import PasswordStrengthMeter from '../components/PasswordStrengthMeter';
@@ -11,6 +11,7 @@ const ResetPassword = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const token = searchParams.get('token');
   const intl = useIntl();
   const lang = localStorage.getItem('lang') || 'es';
@@ -26,12 +27,13 @@ const ResetPassword = () => {
       });
 
       message.success(response.data.message || intl.formatMessage({ id: 'reset.success' }));
+      navigate(`/login?lang=${lang}`, { replace: true });
     } catch (err) {
       const details = err.response?.data?.details;
       if (Array.isArray(details)) {
         details.forEach((msg) => message.error(msg));
       } else {
-        message.error(err.response?.data || intl.formatMessage({ id: 'reset.error' }));
+        message.error(err.response?.data?.message || intl.formatMessage({ id: 'reset.error' }));
       }
     } finally {
       setLoading(false);

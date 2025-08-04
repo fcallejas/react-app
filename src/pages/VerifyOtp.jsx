@@ -37,7 +37,7 @@ export default function VerifyOtp() {
     try {
       await verify2FAAsync({ userId, code: values.otp, lang });
       message.success(intl.formatMessage({ id: 'otp.success' }));
-      navigate('/');
+      navigate('/dashboard');
     } catch (error) {
       const msg = error?.response?.data?.message || intl.formatMessage({ id: 'otp.invalid' });
       message.error(msg);
