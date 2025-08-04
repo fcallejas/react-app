@@ -41,6 +41,22 @@ const messagesEs = {
   'password.lowercase': 'Debe contener una minúscula',
   'password.number': 'Debe contener un número',
   'password.symbol': 'Debe contener un símbolo',
+
+  // Session / Idle
+  'session.title': 'Sesión por expirar',
+  'session.message': '¿Deseas mantener tu sesión activa? Se cerrará automáticamente si no respondes.',
+  'session.keep': 'Mantener sesión',
+  'session.logout': 'Cerrar sesión',
+  'session.refreshed': 'La sesión ha sido extendida.',
+  'session.expired': 'Tu sesión ha expirado. Inicia sesión nuevamente.',
+  'session.countdown': 'Se cerrará en ',
+
+  // reCAPTCHA
+  'captcha.failed': 'Verificación reCAPTCHA fallida. Intenta de nuevo.',
+
+  // Password reuse
+  'password.reused': 'No puedes reutilizar una contraseña anterior.'
+
 };
 
 export default messagesEs;

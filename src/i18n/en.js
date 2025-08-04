@@ -43,6 +43,22 @@ const messagesEn = {
   'password.number': 'Must contain a number',
   'password.symbol': 'Must contain a symbol',
 
+  // Session / Idle
+  'session.title': 'Session about to expire',
+  'session.message': 'Do you want to keep your session active? It will close automatically if you do not respond.',
+  'session.keep': 'Keep session',
+  'session.logout': 'Log out',
+  'session.refreshed': 'Your session has been extended.',
+  'session.expired': 'Your session has expired. Please sign in again.',
+  'session.countdown': 'It will close in ',
+
+  // reCAPTCHA
+  'captcha.failed': 'reCAPTCHA verification failed. Please try again.',
+
+  // Password reuse
+  'password.reused': 'You cannot reuse a previous password.'
+
+
 };
 
 export default messagesEn;

@@ -13,6 +13,8 @@ import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
 import PrivateRoute from './routes/PrivateRoute';
 
+import ProtectedLayout from './layouts/ProtectedLayout';
+
 import useIdleSession from './hooks/useIdleSession';
 
 const messages = {
@@ -37,20 +39,22 @@ export default function App() {
 
   return (
     <IntlProvider locale={locale} messages={messages[locale]}>
-     {WarningModal}
+     
       <Routes>
+        {/* Públicas */}
         <Route path="/login" element={<Login onLanguageChange={setLocale} />} />
         <Route path="/verify-otp" element={<VerifyOtp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
+        {/* Protegidas */}
+      <Route element={<PrivateRoute />}>
+        <Route path="/" element={<ProtectedLayout />}>
+          <Route index path="/dashboard" element={<Dashboard />} />
+          {/* Ejemplos adicionales */}
+          {/* <Route path="reports" element={<Reports />} /> */}
+          {/* <Route path="settings" element={<Settings />} /> */}
+        </Route>
+      </Route>
         {/* Fallback 404 */}
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
