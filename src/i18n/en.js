@@ -8,6 +8,8 @@ const messagesEn = {
   'login.otpRequired': 'Two-factor code required',
   'login.otpMissing': '2FA verification required',
   'login.invalidCredentials': 'Invalid username or password',
+  "login.locked": "Your account has been temporarily locked.",
+  "login.tryAgain": "You can try again in",
 
   'otp.title': 'Code Verification',
   'otp.label': 'Verification Code',

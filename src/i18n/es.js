@@ -8,6 +8,8 @@ const messagesEs = {
   'login.otpRequired': 'Se requiere verificación de código 2FA',
   'login.otpMissing': 'Falta completar la verificación 2FA',
   'login.invalidCredentials': 'Usuario o contraseña incorrectos',
+  "login.locked": "Tu cuenta ha sido bloqueada temporalmente.",
+  "login.tryAgain": "Podrás intentar nuevamente en",
 
   'otp.title': 'Verificación de Código',
   'otp.label': 'Código de Verificación',
