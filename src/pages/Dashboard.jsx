@@ -1,3 +1,5 @@
+import AppMenu from "../components/AppMenu";
+
 export default function Dashboard() {
-  return <h1>Bienvenido al dashboard</h1>;
+  return <AppMenu />;
 }

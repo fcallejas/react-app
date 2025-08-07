@@ -84,7 +84,13 @@ export default function Login({ onLanguageChange }) {
       if (data.requires2FA) {
         message.info(intl.formatMessage({ id: 'login.otpRequired' }));
         navigate('/verify-otp', { state: { userId: data.userId } });
-      } else {
+      } else if(data.token){
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        message.success(intl.formatMessage({ id: 'otp.success' }));
+        navigate('/dashboard');
+      }
+      else {
         message.error(intl.formatMessage({ id: 'login.otpMissing' }));
       }
     } catch (err) {

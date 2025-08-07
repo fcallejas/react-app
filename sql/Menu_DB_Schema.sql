@@ -42,10 +42,10 @@ CREATE TABLE MenuTranslations (
     FOREIGN KEY (LangCode) REFERENCES Languages(Code)
 );
 
--- =====================================
+-- =====================================	
 -- Tabla de acciones disponibles (CRUD)
 -- =====================================
-CREATE TABLE Actions (
+CREATE TABLE Action (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Code NVARCHAR(50) NOT NULL UNIQUE,            -- Ej: view, create, edit, delete
     Description NVARCHAR(200) NOT NULL
@@ -90,3 +90,35 @@ CREATE TABLE MenuAccessLogs (
     FOREIGN KEY (UserId) REFERENCES Users(Id),
     FOREIGN KEY (MenuId) REFERENCES Menus(Id)
 );
+
+drop table MenuAccessLogs
+
+-- =====================================
+-- Tabla de auditoría de accesos y clics en el menú
+-- =====================================
+CREATE TABLE MenuAccessLogs (
+    Id INT IDENTITY(1,1) PRIMARY KEY,                    -- Identificador único del log
+    UserId INT NOT NULL,                                 -- Usuario que accedió
+    MenuId INT NULL,                                     -- ID del menú (FK, si aplica)
+    MenuCode NVARCHAR(100) NULL,                         -- Código opcional si no hay MenuId
+    AccessTime DATETIME NOT NULL DEFAULT GETDATE(),      -- Fecha y hora del acceso
+    IpAddress NVARCHAR(50) NULL,                         -- Dirección IP del cliente
+    UserAgent NVARCHAR(300) NULL,                        -- Información del navegador o dispositivo
+    ActionType NVARCHAR(50) NOT NULL DEFAULT 'click',    -- Tipo de acción: 'click', 'view', etc.
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    FOREIGN KEY (MenuId) REFERENCES Menus(Id)
+);
+
+
+-- Inserta idiomas comunes en la tabla Languages
+INSERT INTO Languages (Code, Name) VALUES 
+('es', 'Español'),
+('en', 'Inglés'),
+('fr', 'Francés'),
+('de', 'Alemán'),
+('pt', 'Portugués'),
+('it', 'Italiano'),
+('zh', 'Chino'),
+('ja', 'Japonés'),
+('ko', 'Coreano'),
+('ru', 'Ruso');
