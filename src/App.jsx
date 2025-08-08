@@ -41,23 +41,28 @@ export default function App() {
     <IntlProvider locale={locale} messages={messages[locale]}>
      
       <Routes>
-        {/* Públicas */}
-        <Route path="/login" element={<Login onLanguageChange={setLocale} />} />
-        <Route path="/verify-otp" element={<VerifyOtp />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        {/* Protegidas */}
+      {/* Públicas */}
+      <Route path="/login" element={<Login onLanguageChange={setLocale} />} />
+      <Route path="/verify-otp" element={<VerifyOtp />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+
+      {/* Protegidas */}
       <Route element={<PrivateRoute />}>
         <Route path="/" element={<ProtectedLayout />}>
-          <Route index path="/dashboard" element={<Dashboard />} />
-          {/* Ejemplos adicionales */}
-          {/* <Route path="reports" element={<Reports />} /> */}
-          {/* <Route path="settings" element={<Settings />} /> */}
+          {/* Si visitas "/", redirige a /dashboard */}
+          <Route index element={<Navigate to="dashboard" replace />} />
+          {/* O bien la ruta hija real, sin "/" al inicio */}
+          <Route path="dashboard" element={<Dashboard />} />
+          {/* Ejemplos:
+          <Route path="reports" element={<Reports />} />
+          <Route path="settings" element={<Settings />} /> */}
         </Route>
       </Route>
-        {/* Fallback 404 */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
+
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
     </IntlProvider>
   );
 }

@@ -29,24 +29,7 @@ export default function AppMenu({ userId, lang }) {
 
   return (
     <>
-      {/* Botón tipo hamburguesa */}
-      <Button className="mobile-menu-btn" icon={<MenuOutlined />} onClick={() => setOpen(true)} />
-
-      {/* Menú en escritorio */}
-      <div className="desktop-menu">
-        <Menu mode="horizontal" items={renderMenu(data)} />
-      </div>
-
-      {/* Drawer en móvil */}
-      <Drawer
-        title="Menú"
-        placement="left"
-        onClose={() => setOpen(false)}
-        open={open}
-        width={250}
-      >
-        <Menu mode="inline" items={renderMenu(data)} />
-      </Drawer>
+     
     </>
   );
 }
