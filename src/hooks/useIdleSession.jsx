@@ -168,9 +168,9 @@ export default function useIdleSession({
       centered
       maskClosable={false}
     >
-      <p>{intl.formatMessage({ id: 'session.message' })}</p>
+      <div>{intl.formatMessage({ id: 'session.message' })}</div>
       {deadline && (
-        <p style={{ fontWeight: 600 }}>
+        <div style={{ fontWeight: 600 }}>
           {intl.formatMessage({ id: 'session.countdown' }, { s: '' })}
           {/* CountDown controla el tick */}
           <Timer type="countdown"
@@ -180,7 +180,7 @@ export default function useIdleSession({
             valueStyle={{ fontWeight: 700 }}
             onFinish={handleAutoLogout} // por si el timeout externo se perdiera
           />
-        </p>
+        </div>
       )}
     </Modal>
   );

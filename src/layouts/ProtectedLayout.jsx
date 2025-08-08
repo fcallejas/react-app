@@ -6,34 +6,93 @@
 // - Muestra menú horizontal en pantallas >= md con estilo expandido.
 // - Incluye <Outlet /> para renderizar rutas hijas.
 // - Integra useIdleSession para cierre de sesión por inactividad/expiración.
+// - Obtiene opciones de menú desde el hook useMenu conectado a la API.
 // ------------------------------------------------------------
 
 import React from "react";
-import { Layout, Grid, Button, Drawer, Menu, Space, Typography, Avatar } from "antd";
+import { Layout, Grid, Button, Drawer, Menu, Space, Typography, Avatar, Spin } from "antd";
 import { MenuOutlined, UserOutlined } from "@ant-design/icons";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import useIdleSession from "../hooks/useIdleSession.jsx";
+import { useMenu } from "../hooks/useMenu.js";
 
 const { Header, Content } = Layout;
 const { useBreakpoint } = Grid;
 const { Title } = Typography;
-
-function useAppMenuItems() {
-  // TODO: reemplazar por tu hook real (ej: useMenu(userId, lang))
-  return React.useMemo(
-    () => [
-      { key: "/dashboard", label: "Dashboard" },
-    ],
-    []
-  );
-}
 
 export default function ProtectedLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const screens = useBreakpoint();
   const [open, setOpen] = React.useState(false);
-  const items = useAppMenuItems();
+
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const lang = localStorage.getItem("lang") || "es";
+
+  // Llamada a la API para obtener el menú según userId e idioma
+  const { data: menuData, isLoading } = useMenu(user.id, lang);
+  /*
+  const items = React.useMemo(() => {
+    return (menuData || []).map((it) => ({
+      key: it.key || it.path || it.id,
+      label: it.label || it.text || "Sin título",
+    }
+    ))}, [menuData]);*/
+
+
+    // 2) Normalizar filas planas y construir árbol children por ParentId
+  const normalizeMenuItems = React.useCallback((data) => {
+    if (!Array.isArray(data)) return [];
+
+    // Paso 1: normalizar nodos base
+    const nodes = data.map((row) => {
+      const id = row.key;
+      const parentId = row.parent ?? null;
+
+      // Label: usa Title si viene directo; si viene como traducciones, tomar por LangCode
+      let label =
+        row.label;
+
+      // Key: prioriza Path (bueno para selectedKeys); fallback Code; último Id
+      const key = String(row.key);
+
+      return { id, parentId, key, label, children: [], raw: row };
+    });
+
+    // Paso 2: armar árbol
+    const byId = new Map(nodes.map((n) => [n.id, n]));
+    const roots = [];
+    for (const n of nodes) {
+      if (n.parentId && byId.has(n.parentId)) {
+        byId.get(n.parentId).children.push(n);
+      } else {
+        roots.push(n);
+      }
+    }
+
+    // Paso 3: limpiar helpers
+    const strip = (n) => ({
+      key: n.key,
+      label: n.label,
+      children: n.children.length ? n.children.map(strip) : undefined,
+      raw: n.raw,
+    });
+
+    return roots.map(strip);
+  }, []);
+
+  const items = React.useMemo(
+    () => {
+      const tempItems=(menuData || []).map((it) => ({
+      key: it.key || it.path || it.id,
+      label: it.label || it.text || "Sin título",
+      parent: it.parent  
+    }));
+      const res=normalizeMenuItems(tempItems || []);
+      //console.log('Items',res);
+      return res},
+    [menuData]
+  );
 
   // Hook de control de sesión inactiva/expirada
   const { WarningModal } = useIdleSession({
@@ -54,10 +113,10 @@ export default function ProtectedLayout() {
     setOpen(false);
   };
 
-  const selectedKeys = React.useMemo(() => {
-    const match = items.find((it) => location.pathname.startsWith(it.key));
-    return match ? [match.key] : [];
-  }, [items, location.pathname]);
+  const selectedKeys =[];/* React.useMemo(() => {
+    const match = items.find((it) => it.key);
+    return match ? [match.label] : [];
+  }, [items, location.pathname]);*/
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -89,13 +148,17 @@ export default function ProtectedLayout() {
 
         {screens.md && (
           <div style={{ flex: 1, marginLeft: 24 }}>
-            <Menu
-              mode="horizontal"
-              items={items}
-              selectedKeys={selectedKeys}
-              onClick={onMenuClick}
-              style={{ lineHeight: "64px", borderBottom: "none" }}
-            />
+            {isLoading ? (
+              <Spin />
+            ) : (
+              <Menu
+                mode="horizontal"
+                items={items}
+                selectedKeys={selectedKeys}
+                onClick={onMenuClick}
+                style={{ lineHeight: "64px", borderBottom: "none" }}
+              />
+            )}
           </div>
         )}
 
@@ -109,15 +172,19 @@ export default function ProtectedLayout() {
         placement="left"
         open={open}
         onClose={() => setOpen(false)}
-        bodyStyle={{ padding: 0 }}
+        
       >
-        <Menu
-          mode="inline"
-          items={items}
-          selectedKeys={selectedKeys}
-          onClick={onMenuClick}
-          style={{ borderRight: 0 }}
-        />
+        {isLoading ? (
+          <Spin style={{ margin: 16 }} />
+        ) : (
+          <Menu
+            mode="inline"
+            items={items}
+            selectedKeys={selectedKeys}
+            onClick={onMenuClick}
+            style={{ borderRight: 0 }}
+          />
+        )}
       </Drawer>
 
       <Content style={{ padding: 16 }}>
